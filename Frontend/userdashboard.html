@@ -8,7 +8,35 @@
 <body>
     <p>Welcome to website</p></br>
     <label>Check if a website is supspicious or not</label>
-    <button id="phishingsite">Check</button></br>
+    <button id="phishingsite">Check</button></br></br>
+    <label>Report any supspicious Email or URL</label>
+    <button id="report">Report</button></br></br>
+    <label>View my reports</label>
+    <button id="viewreports">View</button></br></br>
+
+    <label>Request to be an admin</label>
+    <button id="request">Request</button></br>
+    <p id="adminmsg"></p></br></br>
+
+
+    <div id="reportsection" style="display:none;"> 
+        <div style="display:flex; gap:20px;">
+            <ul id="reportlist" style="width:40%; border:1px solid black;"></ul>
+
+            <div style="width:60%; border:1px solid black; padding:10px;">
+                <h4>Details</h4>
+                <p><b>Type:</b> <span id="dType"></span></p>
+                <p><b>Content:</b> <span id="dContent"></span></p>
+                <p><b>Status:</b> <span id="dStatus"></span></p>
+                <p><b>Description:</b> <span id="dDesc"></span></p>
+                <p><b>Remarks:</b> <span id="dRemarks"></span></p>
+            </div>
+        </div>
+    </div></br></br>
+    <button id="Goback" style="display:none;">Go Back</button></br></br>
+
+
+
     
     <button id="logout">Logout</button>
     <script src="userdashboard.js"></script>

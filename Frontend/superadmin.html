@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label>View all requests to be admin:</label>
+    <button id="adminreq">See here</button>
+
+    <div id="adminsection" style="display:none; gap:30px;">
+
+    <div style="width:40%;">
+        <ul id="requestList"></ul>
+    </div>
+
+    <div id="reqdetails" style="width:60%; border-left:1px solid black; display:none; padding-left:20px;">
+        <h3>User Details</h3>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <p><strong>Name:</strong> <span id="userName"></span></p>
+
+        <button id="approveBtn">Approve</button>
+        <button id="rejectBtn">Reject</button>
+
+        <p id="actionmsg"></p>
+    </div>
+
+    </div>
+
+    <script src="superadmin.js"></script>
+</body>
+</html>

@@ -37,3 +37,24 @@ export const getAdminRequests= async (req,res)=>{
         return res.status(404).json({success:false,message:error.message});
     }
 }
+
+export const getAllUsers=async (req,res)=>{
+    try{
+        const users = await usermodel.find().select(
+            "name email role isAccountVerified adminRequest"
+        );
+
+        return res.status(200).json({
+            success: true,
+            users
+        });
+
+    }
+    catch(error){
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    
+    }
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Submit a Report</h2>
+    <form id="reportform">
+        <label>Type:</label>
+        <select id="type" required>
+            <option value="url">URL</option>
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+        </select></br></br>
+
+        <label>Content:</label>
+        <input type="text" id="content" placeholder="Enter URL or email" required></br></br>
+
+        <label>Description</label>
+        <textarea id="description" placeholder="describe the issue" required></textarea></br></br>
+
+        <p id="msg"></p>
+
+        <button type="submit">Submit Report</button></br></br>
+    </form>
+    <button id="Goback">GoBack</button>
+    <script src="report.js"></script>
+</body>
+</html>

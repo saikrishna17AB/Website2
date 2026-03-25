@@ -65,10 +65,10 @@ export const register= async (req,res)=>{
 }
 
 export const login=async (req,res)=>{
-    let {email,password}=req.body;
+    let {email,password,role}=req.body;
     
     
-    if(!email || !password){
+    if(!email || !password || !role){
         return res.json({success:false,message:'Missing details'})
     }
     if(!validator.isEmail(email)){
@@ -81,12 +81,27 @@ export const login=async (req,res)=>{
             return res.json({success:false,message:'Invalid Email'});
         }
         
+        if (role==="admin" && role !== existingUser.role) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: Wrong role selected"
+            });
+        }
+
+        if (role==="superadmin" && role !== existingUser.role) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: Wrong role selected"
+            });
+        }
+
+        
         //Compare the password given with that stored in database
         const ismatch=await bcrypt.compare(password,existingUser.password);
-
         if(!ismatch){
             return res.status(400).json({success:false,message:'Password not matched'});
         }
+
         //If successful login , generate and send token
 
         const token=jwt.sign({id:existingUser._id},process.env.JWT_SECRET,{expiresIn:'2d'});
@@ -100,7 +115,9 @@ export const login=async (req,res)=>{
             maxAge:60*60*1000      
 
         })
-        return res.status(200).json({success:true,message:'Logged in successfully'})
+        return res.status(200).json({success:true,message:'Logged in successfully',
+            role:existingUser.role
+        });
         
     }
     catch(error){

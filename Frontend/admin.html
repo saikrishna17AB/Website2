@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+
+    <button id="viewReports">View Reports</button>
+    <button id="viewUsers">View Users</button>
+    <button id="logout">Logout</button>
+
+    <hr>
+
+    <!-- REPORT SECTION -->
+        <div id="reportsSection" style="display:none;">
+        <h3>Reports</h3>
+        
+        
+        <div style="display:flex; gap:20px;">
+            <!-- LEFT: REPORT LIST -->
+            <ul id="reportList" style="width:40%; border-right:1px solid #ccc;"></ul>
+
+            <!-- RIGHT: REPORT DETAILS -->
+            <div id="reportDetails" style="width:60%; display:none;">
+                <p><strong>Type:</strong> <span id="rType"></span></p>
+                <p><strong>Content:</strong> <span id="rContent"></span></p>
+                <p><strong>Status:</strong> <span id="rStatus"></span></p>
+                <p><strong>Description:</strong> <span id="rDesc"></span></p>
+                <p><strong>Reported By:</strong> <span id="rUser"></span></p>
+                <p><strong>Date:</strong> <span id="rDate"></span></p>
+
+                <hr>
+
+                <label>Status:</label>
+                <select id="statusSelect">
+                    <option value="under-review">Under Review</option>
+                    <option value="safe">Safe</option>
+                    <option value="phishing">Phishing</option>
+                </select>
+
+                <br><br>
+
+                <label>Admin Remarks:</label><br>
+                <textarea id="adminRemarks" rows="4" cols="40"></textarea>
+
+                <p id="message" style="font-weight:bold;"></p>
+
+                <br><br>
+
+                <button id="updateReportBtn">Update Report</button>
+            </div>
+        </div>
+        <button id="backFromReports">⬅ Back</button>
+    </div>
+
+
+    <!-- USERS SECTION -->
+    <div id="usersSection" style="display:none;">
+        <h3>All Users</h3>
+
+        <div style="display:flex; gap:20px;">
+            <ul id="userList" style="width:40%;"></ul>
+
+            <div id="userDetails" style="width:60%; display: none;">
+                <p><strong>Name:</strong> <span id="uName"></span></p>
+                <p><strong>Email:</strong> <span id="uEmail"></span></p>
+                <p><strong>Role:</strong> <span id="uRole"></span></p>
+            </div>
+        </div>
+        <button id="backFromUsers">⬅ Back</button>
+    </div>
+<script src="admin.js"></script>
+</body>
+</html>
