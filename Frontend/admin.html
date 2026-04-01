@@ -3,75 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Area | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-    <h2>Admin Dashboard</h2>
+    <header>
+        <a href="#" class="nav-brand">ADMIN COMMAND</a>
+        <nav>
+            <ul>
+                <li><button id="logout" class="btn-secondary">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
 
-    <button id="viewReports">View Reports</button>
-    <button id="viewUsers">View Users</button>
-    <button id="logout">Logout</button>
-
-    <hr>
-
-    <!-- REPORT SECTION -->
-        <div id="reportsSection" style="display:none;">
-        <h3>Reports</h3>
-        
-        
-        <div style="display:flex; gap:20px;">
-            <!-- LEFT: REPORT LIST -->
-            <ul id="reportList" style="width:40%; border-right:1px solid #ccc;"></ul>
-
-            <!-- RIGHT: REPORT DETAILS -->
-            <div id="reportDetails" style="width:60%; display:none;">
-                <p><strong>Type:</strong> <span id="rType"></span></p>
-                <p><strong>Content:</strong> <span id="rContent"></span></p>
-                <p><strong>Status:</strong> <span id="rStatus"></span></p>
-                <p><strong>Description:</strong> <span id="rDesc"></span></p>
-                <p><strong>Reported By:</strong> <span id="rUser"></span></p>
-                <p><strong>Date:</strong> <span id="rDate"></span></p>
-
-                <hr>
-
-                <label>Status:</label>
-                <select id="statusSelect">
-                    <option value="under-review">Under Review</option>
-                    <option value="safe">Safe</option>
-                    <option value="phishing">Phishing</option>
-                </select>
-
-                <br><br>
-
-                <label>Admin Remarks:</label><br>
-                <textarea id="adminRemarks" rows="4" cols="40"></textarea>
-
-                <p id="message" style="font-weight:bold;"></p>
-
-                <br><br>
-
-                <button id="updateReportBtn">Update Report</button>
+    <div class="container fade-in">
+        <!-- Dashboard Main Menu -->
+        <div id="mainMenu" style="display: flex; flex-direction: column; align-items: center; gap: 3rem; margin-top: 4rem;">
+            <div style="text-align: center;">
+                <h1>Admin Command Center</h1>
+                <p style="color: var(--text-muted);">Select a sector to manage intelligence or operatives.</p>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; width: 100%; max-width: 800px;">
+                <div class="modern-card" style="text-align: center; cursor: pointer; padding: 3rem;" id="viewReportsBtn">
+                    <div style="width: 60px; height: 60px; background: #e0f2fe; border-radius: 15px; display: flex; justify-content: center; align-items: center; margin: 0 auto 1.5rem; color: #0369a1;">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <h3>Intelligence Reports</h3>
+                    <p>Review and update status of field reports.</p>
+                </div>
+                
+                <div class="modern-card" style="text-align: center; cursor: pointer; padding: 3rem;" id="viewUsersBtn">
+                    <div style="width: 60px; height: 60px; background: #f1f5f9; border-radius: 15px; display: flex; justify-content: center; align-items: center; margin: 0 auto 1.5rem; color: #475569;">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3>User Management</h3>
+                    <p>View and manage all registered operatives.</p>
+                </div>
             </div>
         </div>
-        <button id="backFromReports">⬅ Back</button>
-    </div>
 
+        <!-- Reports Management Section -->
+        <div id="reportsSection" style="display: none;">
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <h2>Intelligence Reports</h2>
+                <button id="backFromReports" class="btn-secondary">Back to Menu</button>
+            </div>
 
-    <!-- USERS SECTION -->
-    <div id="usersSection" style="display:none;">
-        <h3>All Users</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Content</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
 
-        <div style="display:flex; gap:20px;">
-            <ul id="userList" style="width:40%;"></ul>
+                <div id="reportDetails" class="modern-card" style="max-width: none; display: none; padding: 2.5rem;">
+                    <h3>Report Findings</h3>
+                    <hr style="margin: 1.5rem 0; border: 1px solid var(--border-color);">
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <p><b>Report ID:</b> <span id="rID"></span></p>
+                        <p><b>Description:</b> <span id="rDesc" style="color: var(--text-muted);"></span></p>
+                        <p><b>Reported By:</b> <span id="rUser"></span></p>
+                        <p><b>Date:</b> <span id="rDate"></span></p>
+                        
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label>Update Status</label>
+                            <select id="statusSelect">
+                                <option value="under-review">Under Review</option>
+                                <option value="safe">Safe</option>
+                                <option value="phishing">Phishing</option>
+                            </select>
+                        </div>
 
-            <div id="userDetails" style="width:60%; display: none;">
-                <p><strong>Name:</strong> <span id="uName"></span></p>
-                <p><strong>Email:</strong> <span id="uEmail"></span></p>
-                <p><strong>Role:</strong> <span id="uRole"></span></p>
+                        <div class="form-group">
+                            <label>Administrative Remarks</label>
+                            <textarea id="adminRemarks" placeholder="Enter notes here..." style="min-height: 100px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px;"></textarea>
+                        </div>
+                        <p id="message" style="font-weight:bold;"></p>
+                        <button id="updateReportBtn" class="btn-primary">Update Report</button>
+                        
+                    </div>
+                </div>
             </div>
         </div>
-        <button id="backFromUsers">⬅ Back</button>
+
+        <!-- User Management Section -->
+        <div id="usersSection" style="display: none;">
+             <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <h2>Operative Registry</h2>
+                <button id="backFromUsers" class="btn-secondary">Back to Menu</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem;">
+                <div class="modern-card" style="max-width: none; padding: 2rem;">
+                    <h4>All Operatives</h4>
+                    <ul id="userList" style="list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Dynamic -->
+                    </ul>
+                </div>
+
+                <div id="uDetails" class="modern-card" style="max-width: none; display: none; padding: 2rem;">
+                    <h4>Operative Identity</h4>
+                    <hr style="margin: 1.5rem 0; border: 1px solid var(--border-color);">
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                         <p><b>Name:</b> <span id="uName" style="color: var(--primary-purple); font-weight: 500;"></span></p>
+                        <p><b>Email Address:</b> <span id="uEmail"></span></p>
+                        <p><b>Clearance Level:</b> <span id="uRole" class="badge" style="background: #f1f5f9; color: #475569;"></span></p>
+                    </div>
+                    <button id="suspendBtn">Suspend User</button>
+                    <button id="activateBtn">Activate User</button>
+                    <p id="userActionMessage"></p>
+                </div>
+            </div>
+        </div>
     </div>
-<script src="admin.js"></script>
+
+    <script src="admin.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

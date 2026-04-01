@@ -10,7 +10,8 @@ const userSchema=new mongoose.Schema({
     resetOtp:{type:String,default:''},
     resetOtpExpireAt:{type:Number,default:0},
     role:{type:String,enum:['user','admin','superadmin'],default:'user',required:true},
-    adminRequest:{type:Boolean,default:false}    
+    adminRequest:{type:Boolean,default:false},
+    isSuspended:{type:Boolean,default:false}
 
 },{timestamps:true});
 

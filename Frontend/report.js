@@ -1,44 +1,49 @@
-function validateInput(type,content){
-    if(type==="email"){
-        const emailregex=/^\S+@\S+\.\S+$/;
+function validateInput(type, content) {
+    if (type === "email") {
+        const emailregex = /^\S+@\S+\.\S+$/;
         return emailregex.test(content);
     }
 
-    if(type==="phone"){
+    if (type === "phone") {
         const phoneregex = /^[6-9][0-9]{9}$/;
         return phoneregex.test(content);
     }
 
-    if(type==="url"){
-        try{
-            const parsed=new URL(content);
+    if (type === "url") {
+        try {
+            const parsed = new URL(content);
             return parsed.protocol === "http:" || parsed.protocol === "https:";
-        }
-        catch{
+        } catch {
             return false;
         }
     }
     return false;
 }
 
-document.getElementById("reportform").addEventListener("submit",async (e)=>{
+const reportForm = document.getElementById("reportform");
+const submitBtn = reportForm.querySelector('button[type="submit"]');
+
+reportForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const type=document.getElementById("type").value;
-    const content=document.getElementById("content").value.trim();
-    const description=document.getElementById("description").value.trim();
-    const message=document.getElementById("msg");
+    const type = document.getElementById("type").value;
+    const content = document.getElementById("content").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const message = document.getElementById("msg");
 
-    if(!validateInput(type,content)){
-        message.innerText=`Invalid ${type} format`;
-        message.style.color="red";
+    if (!validateInput(type, content)) {
+        message.innerText = `Protocol entry error: Invalid ${type} format`;
+        message.className = "feedback error";
         return;
     }
 
-    try{
-        const response=await fetch("http://localhost:4000/api/report/create",{
-            method:"POST",
-            headers:{
+    submitBtn.innerText = "Transmitting...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("http://localhost:4000/api/report/create", {
+            method: "POST",
+            headers: {
                 "Content-Type": "application/json"
             },
             credentials: "include",
@@ -47,42 +52,40 @@ document.getElementById("reportform").addEventListener("submit",async (e)=>{
                 content,
                 description
             })
-
         });
 
-        const data=await response.json();
+        const data = await response.json();
 
-        if(data.success){
-            message.innerText = "Report submitted successfully";
-            message.style.color = "green";
-            document.getElementById("reportform").reset();
+        if (data.success) {
+            message.innerText = "Intelligence transmitted successfully.";
+            message.className = "feedback success";
+            reportForm.reset();
+        } else {
+            message.innerText = `Transmission failed: ${data.message}`;
+            message.className = "feedback error";
         }
-        else{
-            message.innerText = data.message;
-            message.style.color = "red";
-        }
-    }
-    catch(error){
-        message.innerText = "Server error";
-        message.style.color = "red";
+    } catch (error) {
+        message.innerText = "Terminal error: Security council unreachable.";
+        message.className = "feedback error";
+    } finally {
+        submitBtn.innerText = "Transmit Report";
+        submitBtn.disabled = false;
     }
 });
 
-document.getElementById("type").addEventListener("change",()=>{
-    const type=document.getElementById("type").value;
-    const content=document.getElementById("content");
+document.getElementById("type").addEventListener("change", () => {
+    const type = document.getElementById("type").value;
+    const content = document.getElementById("content");
 
-    if(type==="email"){
-        content.placeholder="Enter email";
-    }
-    else if(type==="phone"){
-        content.placeholder="Enter phoneno";
-    }
-    else{
-        content.placeholder="Enter URL";
+    if (type === "email") {
+        content.placeholder = "Enter sender email";
+    } else if (type === "phone") {
+        content.placeholder = "Enter phone number";
+    } else {
+        content.placeholder = "Enter malicious URL";
     }
 });
 
-document.querySelector("#Goback").addEventListener("click",()=>{
-    window.location.href="userdashboard.html";
-})
+document.querySelector("#Goback").addEventListener("click", () => {
+    window.location.href = "userdashboard.html";
+});

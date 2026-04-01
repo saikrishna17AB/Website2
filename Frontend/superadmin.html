@@ -3,31 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Super Admin | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="superadmin.css">
 </head>
 <body>
-    <label>View all requests to be admin:</label>
-    <button id="adminreq">See here</button>
+    <header>
+        <a href="userdashboard.html" class="nav-brand">CYBER SENTINEL <span style="font-size: 0.65rem; vertical-align: middle; color: var(--danger-red); text-transform: uppercase;">[Super Admin]</span></a>
+        <nav>
+            <ul>
+                <li><a href="userdashboard.html">Dashboard</a></li>
+                <li><a href="superadmin.html" style="color: var(--primary-purple);">User Registry</a></li>
+                <li><button id="logout" class="btn-secondary">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div id="adminsection" style="display:none; gap:30px;">
+    <div class="container fade-in">
+        <div class="superadmin-header">
+            <div>
+                <h1>User Administration</h1>
+                <p style="color: var(--text-muted);">Manage high-level access and admin requests.</p>
+            </div>
+            <div id="status-indicator">
+                <span class="badge" style="background: #fee2e2; color: #991b1b; border-radius: 50px; font-weight: 700; padding: 0.5rem 1rem;">FULL ACCESS</span>
+            </div>
+        </div>
 
-    <div style="width:40%;">
-        <ul id="requestList"></ul>
-    </div>
-
-    <div id="reqdetails" style="width:60%; border-left:1px solid black; display:none; padding-left:20px;">
-        <h3>User Details</h3>
-        <p><strong>Email:</strong> <span id="userEmail"></span></p>
-        <p><strong>Name:</strong> <span id="userName"></span></p>
-
-        <button id="approveBtn">Approve</button>
-        <button id="rejectBtn">Reject</button>
-
-        <p id="actionmsg"></p>
-    </div>
-
+        <div class="registry-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email Address</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table">
+                    <!-- Dynamic content from superadmin.js -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="superadmin.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

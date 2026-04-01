@@ -1,0 +1,53 @@
+/* Scanner Tool Specific Styles */
+.scanner-container {
+    max-width: 650px;
+    margin: 4rem auto;
+    text-align: center;
+}
+
+.scanner-header {
+    margin-bottom: 3rem;
+}
+
+.scanner-header h1 {
+    font-size: 2.5rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.input-section {
+    background: white;
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+}
+
+.result-section {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    border: 1px solid var(--border-color);
+}
+
+.scanning-animation {
+    height: 4px;
+    width: 0;
+    background: var(--primary-gradient);
+    border-radius: 10px;
+    margin: 2rem 0;
+    transition: width 2s ease-in-out;
+}
+
+.status-box {
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin-top: 1.5rem;
+    font-weight: 500;
+}

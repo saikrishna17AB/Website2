@@ -3,18 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign Up | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="login.css">
 </head>
-<body>
-    <form id="register">
-        <label>Name:</label><input type="text" placeholder="Enter Name:" id="name"></br>
-        <label>Email id:</label><input type="text" placeholder="Enter email" id="email"></br>
-        <label>Password:</label><input type="password" placeholder="Enter password" id="passwd"></br>
-        <p id="message"></p></br>
-        <button id="button">Register</button>
-        <p>Already have an account? <a href="login.html">Login</a></p>
+<body class="centered-content">
+    <div class="modern-card fade-in">
+        <h2 style="margin-bottom: 2.5rem; text-align: center; color: var(--text-main);">Sign Up</h2>
+        
+        <form id="register">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <div class="input-with-icon">
+                    <i data-lucide="user"></i>
+                    <input type="text" placeholder="John Doe" id="name" required>
+                </div>
+            </div>
 
-    </form>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-with-icon">
+                    <i data-lucide="mail"></i>
+                    <input type="text" placeholder="name@company.com" id="email" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="passwd">Password</label>
+                <div class="input-with-icon">
+                    <i data-lucide="lock"></i>
+                    <input type="password" placeholder="••••••••" id="passwd" required>
+                </div>
+            </div>
+
+            <p id="message" class="feedback" style="margin-bottom: 1.5rem; min-height: 1.5rem;"></p>
+
+            <button id="button" class="btn-primary">Sign Up</button>
+
+            <div class="register-link" style="margin-top: 2rem;">
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </form>
+    </div>
+
     <script src="register.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

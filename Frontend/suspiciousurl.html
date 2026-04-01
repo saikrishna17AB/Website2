@@ -3,30 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tool Analysis | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="scanner.css">
 </head>
 <body>
-    <label>Enter Website URL</label>
-    <input type="text" placeholder="Enter value" id="url">
-    <button id="check">Check</button>
-    </br></br>
-    <div id="result">
-        <p id="status"></p>
-        <p id="score"></p>
-    </div>
+    <header>
+        <a href="userdashboard.html" class="nav-brand">CYBER SENTINEL</a>
+        <nav>
+            <ul>
+                <li><a href="userdashboard.html">Dashboard</a></li>
+                <li><a href="suspiciousurl.html" style="color: var(--primary-purple);">URL Tools</a></li>
+                <li><a href="passwordbreach.html">Security Check</a></li>
+                <li><a href="report.html">Report Incident</a></li>
+                <li><button id="logout" class="btn-secondary">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
 
-    <label>Enter Email ID</label>
-    <input type="text" placeholder="Enter value" id="eid">
-    <button id="checkemail">Check</button>
-    </br></br>
-    <div id="resultemail">
-        <p id="statusemail"></p></br>
-        <p id="scoreemail"></p></br>
-    </div>
+    <div class="container fade-in">
+        <div class="scanner-header" style="text-align: center;">
+            <h1>Web & Email Security</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Check if links or email addresses are safe from cyber threats.</p>
+        </div>
 
-    </br>
-    <button id="goback">Go Back</button>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem;">
+            <!-- URL Analysis -->
+            <div class="input-section">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; justify-content: center;">
+                    <i data-lucide="globe" style="color: var(--primary-purple);"></i>
+                    <h3 style="margin: 0;">URL Scanner</h3>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="url" placeholder="Enter URL (e.g., mysite.com)">
+                </div>
+                <button id="check" class="btn-primary">Check URL</button>
+                
+                <div id="url-result" class="result-section">
+                    <div style="display: flex; justify-content: space-around; align-items: center;">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Result</span>
+                            <span id="status" class="badge"></span>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Score</span>
+                            <span id="score" style="font-size: 1.5rem; font-weight: 700; color: var(--primary-purple);"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Analysis -->
+            <div class="input-section">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; justify-content: center;">
+                    <i data-lucide="mail" style="color: var(--primary-purple);"></i>
+                    <h3 style="margin: 0;">Email Scanner</h3>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="eid" placeholder="Enter email address">
+                </div>
+                <button id="checkemail" class="btn-primary">Check Email</button>
+
+                <div id="email-result" class="result-section">
+                    <div style="display: flex; justify-content: space-around; align-items: center;">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Result</span>
+                            <span id="statusemail" class="badge"></span>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Score</span>
+                            <span id="scoreemail" style="font-size: 1.5rem; font-weight: 700; color: var(--primary-purple);"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <button id="goback" class="btn-secondary"><i data-lucide="arrow-left" style="width: 16px; vertical-align: middle; margin-right: 8px;"></i> Return to Dashboard</button>
+        </div>
+    </div>
 
     <script src="suspiciousurl.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

@@ -2,22 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="login.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="login.css">
 </head>
-<body>
-    <label>Select type:</label><select id="role" name="type">
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-        <option value="superadmin">SuperAdmin</option>
-    </select></br>
-    <label>Email id:</label><input type="text" placeholder="Enter email" id="email"></br>
-    <label>Password:</label><input type="password" placeholder="Enter password" id="passwd">
-    <p id="message"></p>
-    <button id="sub">Login</button></br></br>
-    <button id="logout">Logout</button></br>
-    <p>Dont have an account <a href="register.html">Signup</a></p>
+<body class="centered-content">
+    <div class="modern-card fade-in">
+        <h2 style="margin-bottom: 2.5rem; text-align: center; color: var(--text-main);">Login</h2>
+        
+        <div class="form-group">
+            <label for="role">Access Level</label>
+            <div class="input-with-icon">
+                <i data-lucide="shield"></i>
+                <select id="role" name="type">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="superadmin">SuperAdmin</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-with-icon">
+                <i data-lucide="user"></i>
+                <input type="text" placeholder="Enter your email" id="email">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="passwd">Password</label>
+            <div class="input-with-icon">
+                <i data-lucide="lock"></i>
+                <input type="password" placeholder="Enter your password" id="passwd">
+            </div>
+        </div>
+
+        <a href="#" class="forgot-password">Forgot password?</a>
+
+        <p id="message" class="feedback" style="margin-bottom: 1rem; min-height: 1.5rem;"></p>
+
+        <button id="sub" class="btn-primary" style="margin-top: 1rem;">Login</button>
+        
+        <div class="social-login">
+            <p>Or Sign In Using</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon fb"><i data-lucide="facebook"></i></a>
+                <a href="#" class="social-icon tw"><i data-lucide="twitter"></i></a>
+                <a href="#" class="social-icon gp"><i data-lucide="globe"></i></a>
+            </div>
+        </div>
+
+        <div class="register-link">
+            <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+        </div>
+    </div>
+
     <script src="login.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

@@ -1,98 +1,70 @@
+const usersTable = document.getElementById("users-table");
 
-let selectedUserId=null;
+async function loadOperatives() {
+    usersTable.innerHTML = '<tr><td colspan="5" style="text-align:center;">Synchronizing Registry...</td></tr>';
 
-function showDetails(user){
-    selectedUserId=user._id;
-
-    document.querySelector("#userEmail").innerText=user.email;
-    document.querySelector("#userName").innerText=user.name;
-
-    document.querySelector("#reqdetails").style.display="block";
-}
-async function loadRequests(){
-    const list=document.querySelector("#requestList");
-    list.innerHTML="";  
-
-    try{
-        const response=await fetch("http://localhost:4000/api/user/getadminrequests",{
-            credentials:"include"
+    try {
+        const response = await fetch("http://localhost:4000/api/user/getadminrequests", {
+            credentials: "include"
         });
-
-        if(!response.ok){
-            console.log("Request failed");
+        const data = await response.json();
+        
+        if (!data.success) {
+            usersTable.innerHTML = '<tr><td colspan="5" style="text-align:center;">No pending requests found.</td></tr>';
             return;
         }
-        const data=await response.json();
-        
-        if(!data.success){
-            return
-        }
 
-        data.users.forEach(user=>{
-            const li=document.createElement("li");
+        usersTable.innerHTML = "";
+        data.users.forEach(user => {
+            const tr = document.createElement("tr");
+            
+            const roleClass = user.role === "admin" ? "badge-warning" : "info";
+            const requestStatus = user.role === "admin" ? "Completed" : "Pending Approval";
 
-            li.innerText=user.name;
-            li.style.cursor="pointer";
-
-            li.onclick = ()=> showDetails(user);
-
-            list.appendChild(li);
-        })
-
-
-    }
-    catch(error){
-        console.log("Error loading requests");
+            tr.innerHTML = `
+                <td>${user.name}</td>
+                <td style="color: var(--primary-cyan);">${user.email}</td>
+                <td><span class="badge ${roleClass}">${user.role}</span></td>
+                <td>${requestStatus}</td>
+                <td>
+                    <div class="action-group">
+                        <button class="action-btn btn-approve" onclick="processRequest('${user._id}', 'approve')">Approve</button>
+                        <button class="action-btn btn-reject" onclick="processRequest('${user._id}', 'reject')">Reject</button>
+                    </div>
+                </td>
+            `;
+            usersTable.appendChild(tr);
+        });
+    } catch (error) {
+        usersTable.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger-red);">Registry Access Denied</td></tr>';
     }
 }
 
-
-const btn=document.querySelector("#adminreq");
-const section=document.querySelector("#adminsection");
-
-btn.addEventListener("click",()=>{
-    section.style.display="flex";
-    loadRequests();
-})
-
-document.querySelector("#approveBtn").addEventListener("click",async ()=>{
-    if(!selectedUserId) return;
-
-    const response=await fetch("http://localhost:4000/api/auth/approveadmin",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({userid: selectedUserId})
-    });
-
-    const data=await response.json();
+window.processRequest = async (userId, action) => {
+    const endpoint = action === "approve" ? "approveadmin" : "rejectadmin";
     
-    const msg=document.querySelector("#actionmsg");
-    msg.innerText=data.message;
-    msg.style.color=data.success ? "green" : "red";
+    try {
+        const response = await fetch(`http://localhost:4000/api/auth/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ userid: userId })
+        });
 
-    loadRequests();
-});
+        const data = await response.json();
+        if (data.success) {
+            loadOperatives();
+        }
+    } catch (error) {
+        console.error("Action failed", error);
+    }
+};
 
-document.querySelector("#rejectBtn").addEventListener("click",async ()=>{
-    if(!selectedUserId) return;
+document.getElementById("logout").onclick = () => {
+    window.location.href = "login.html";
+};
 
-    const response=await fetch("http://localhost:4000/api/auth/rejectadmin",{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({ userid: selectedUserId })
-    });
-
-    const data=await response.json();
-
-    const msg = document.getElementById("actionmsg");
-    msg.innerText = data.message;
-    msg.style.color = data.success ? "green" : "red";
-
-    loadRequests(); //
-})
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+    loadOperatives();
+});

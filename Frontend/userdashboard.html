@@ -3,46 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard | Cyber Sentinel</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="userdashboard.css">
 </head>
 <body>
-    <p>Welcome to website</p></br>
-    <label>Check if a website is supspicious or not</label>
-    <button id="phishingsite">Check</button></br></br>
-    <label>Report any supspicious Email or URL</label>
-    <button id="report">Report</button></br></br>
-    <label>View my reports</label>
-    <button id="viewreports">View</button></br></br>\
+    <header>
+        <a href="userdashboard.html" class="nav-brand">CYBER SENTINEL</a>
+        <nav>
+            <ul>
+                <li><a href="userdashboard.html" style="color: var(--primary-purple);">Dashboard</a></li>
+                <li><a href="suspiciousurl.html">URL Tools</a></li>
+                <li><a href="passwordbreach.html">Security Check</a></li>
+                <li><a href="report.html">Report Incident</a></li>
+                <li><button id="logout" class="btn-secondary">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
 
+    <div class="container fade-in">
+        <div style="margin-bottom: 4rem;">
+            <h1>Your Dashboard</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Welcome back! Access your security tools and reports below.</p>
+        </div>
 
-    <label>Request to be an admin</label>
-    <button id="request">Request</button></br>
-    <p id="adminmsg"></p></br></br>
+        <div class="dashboard-grid">
+            <div class="tool-card">
+                <div>
+                    <div class="tool-icon"><i data-lucide="globe"></i></div>
+                    <h3>URL Scan</h3>
+                    <p>Check if a website link or domain is safe to visit.</p>
+                </div>
+                <button id="phishingsite" class="btn-primary">Analyze URL</button>
+            </div>
 
-    <lbael>See if your password is leaked in some breach..</lbael>
-    <button id="breachbutton">See</button>
-    
+            <div class="tool-card">
+                <div>
+                    <div class="tool-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Data Leaks</h3>
+                    <p>Find out if your password has been leaked in a data breach.</p>
+                </div>
+                <button id="breachbutton" class="btn-primary">Check Security</button>
+            </div>
 
-    <div id="reportsection" style="display:none;"> 
-        <div style="display:flex; gap:20px;">
-            <ul id="reportlist" style="width:40%; border:1px solid black;"></ul>
+            <div class="tool-card">
+                <div>
+                    <div class="tool-icon"><i data-lucide="file-warning"></i></div>
+                    <h3>Report Tool</h3>
+                    <p>Found something suspicious? Send a report to our team.</p>
+                </div>
+                <button id="report" class="btn-primary">Report Incident</button>
+            </div>
 
-            <div style="width:60%; border:1px solid black; padding:10px;">
-                <h4>Details</h4>
-                <p><b>Type:</b> <span id="dType"></span></p>
-                <p><b>Content:</b> <span id="dContent"></span></p>
-                <p><b>Status:</b> <span id="dStatus"></span></p>
-                <p><b>Description:</b> <span id="dDesc"></span></p>
-                <p><b>Remarks:</b> <span id="dRemarks"></span></p>
+            <div class="tool-card">
+                <div>
+                    <div class="tool-icon"><i data-lucide="key"></i></div>
+                    <h3>Admin Access</h3>
+                    <p>Request special permissions to access the admin site.</p>
+                </div>
+                <button id="request" class="btn-secondary" style="color: var(--warning-yellow); border: 2px solid var(--warning-yellow);">Request Admin</button>
+                <p id="adminmsg" class="feedback" style="margin-top: 1rem;"></p>
             </div>
         </div>
-    </div></br></br>
-    <button id="Goback" style="display:none;">Go Back</button></br></br>
 
+        <div class="reports-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                <h2>Your Reports</h2>
+                <button id="viewreports" class="btn-secondary">View Reports</button>
+            </div>
 
+            <div id="reportsection" style="display:none;" class="fade-in"> 
+                <div class="report-list">
+                    <div style="max-height: 500px; overflow-y: auto; padding-right: 1.5rem;">
+                         <ul id="reportlist" style="list-style: none; display: flex; flex-direction: column; gap: 1rem;"></ul>
+                    </div>
 
-    
-    <button id="logout">Logout</button>
+                    <div class="modern-card" style="max-width: none; padding: 2.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                            <div class="tool-icon" style="margin: 0; width: 45px; height: 45px;"><i data-lucide="search"></i></div>
+                            <h3 style="margin: 0;">Report Details</h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                            <p style="margin: 0;"><b>Incident Type:</b> <span id="dType" class="badge"></span></p>
+                            <p style="margin: 0;"><b>Reported Item:</b> <span id="dContent" style="color: var(--primary-purple); font-weight: 500;"></span></p>
+                            <p style="margin: 0;"><b>Status:</b> <span id="dStatus" style="font-weight: 600;"></span></p>
+                            <p style="margin: 0;"><b>Description:</b> <span id="dDesc" style="color: var(--text-muted);"></span></p>
+                            <div style="background: #f8fafc; padding: 1.5rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary-purple);">
+                                <b>Admin Feedback:</b><br>
+                                <span id="dRemarks" style="font-style: italic; color: var(--text-muted); font-size: 0.9rem;">No feedback available yet.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem;">
+                    <button id="Goback" class="btn-secondary" style="display:none;"><i data-lucide="chevron-up" style="vertical-align: middle; margin-right: 5px; width: 16px;"></i> Hide Reports</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="userdashboard.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>

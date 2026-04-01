@@ -1,9 +1,11 @@
 const resultMsg = document.getElementById("resultMsg");
+const checkBtn = document.getElementById("checkBtn");
+const passwordInput = document.getElementById("passwordInput");
 
 async function checkPassword(password) {
-
-    resultMsg.innerText = "Checking...";
-    resultMsg.style.color = "black";
+    resultMsg.innerHTML = '<span class="feedback info">Initializing Scan...</span>';
+    checkBtn.innerText = "Scanning Hash Range...";
+    checkBtn.disabled = true;
 
     try {
         // Step 1: Convert password → SHA-1 hash
@@ -39,45 +41,47 @@ async function checkPassword(password) {
             }
         }
 
-        // Step 5: Show EXACT result
+        // Step 5: Show result as badge
         if (breachCount > 0) {
-            resultMsg.innerText =
-                `⚠️ Compromised Password!\n\n` +
-                `This password has appeared ${breachCount} times in data breaches.\n` +
-                `It is NOT safe to use.\n\n` +
-                `👉 Please choose a stronger password.`;
-
-            resultMsg.style.color = "red";
+            resultMsg.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <span class="badge badge-danger">Compromised</span>
+                    <p style="font-size: 0.9rem; color: var(--danger-red);">
+                        Detected in <b>${breachCount.toLocaleString()}</b> known breaches.
+                    </p>
+                </div>
+            `;
         } else {
-            resultMsg.innerText =
-                `✅ Safe Password\n\n` +
-                `This password was NOT found in known data breaches.\n` +
-                `Still, make sure it's strong and unique.`;
-
-            resultMsg.style.color = "green";
+            resultMsg.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <span class="badge badge-safe">Secure</span>
+                    <p style="font-size: 0.9rem; color: var(--success-green);">
+                        No matches found in global breach catalogs.
+                    </p>
+                </div>
+            `;
         }
 
     } catch (error) {
-        resultMsg.innerText = "Error checking password";
-        resultMsg.style.color = "red";
+        resultMsg.innerHTML = '<span class="feedback error">Scan Interrupted: Network Error</span>';
+    } finally {
+        checkBtn.innerText = "Initiate Scan";
+        checkBtn.disabled = false;
     }
 }
 
-
-document.getElementById("checkBtn").onclick = () => {
-    const password = document.getElementById("passwordInput").value;
+checkBtn.onclick = () => {
+    const password = passwordInput.value;
 
     if (!password) {
-        resultMsg.innerText = "Please enter a password";
-        resultMsg.style.color = "red";
+        resultMsg.innerHTML = '<span class="feedback error">Input required: Empty token</span>';
         return;
     }
 
     checkPassword(password);
 };
 
-
 // ⬅ Back button
 document.getElementById("backBtn").onclick = () => {
-    window.location.href = "admin.html"; // change if needed
-};
+    window.location.href = "userdashboard.html";
+};

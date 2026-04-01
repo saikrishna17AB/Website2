@@ -375,3 +375,28 @@ export const RejectAdmin=async (req,res)=>{
     }
 }
 
+
+export const suspendUser = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        await User.findByIdAndUpdate(userId, { isSuspended: true });
+
+        res.json({ success: true, message: "User suspended" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+export const activateUser = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        await User.findByIdAndUpdate(userId, { isSuspended: false });
+
+        res.json({ success: true, message: "User activated" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
