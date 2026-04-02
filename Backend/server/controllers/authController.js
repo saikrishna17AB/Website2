@@ -67,6 +67,9 @@ export const register= async (req,res)=>{
 export const login=async (req,res)=>{
     let {email,password,role}=req.body;
     
+      
+
+
     
     if(!email || !password || !role){
         return res.json({success:false,message:'Missing details'})
@@ -80,6 +83,12 @@ export const login=async (req,res)=>{
         if(!existingUser){
             return res.json({success:false,message:'Invalid Email'});
         }
+        if (existingUser.isSuspended===true) {
+            return res.status(403).json({
+                success: false,
+                message: "Account suspended. Contact admin."
+            });
+        }   
         
         if (role==="admin" && role !== existingUser.role) {
             return res.status(403).json({
@@ -410,7 +419,25 @@ export const activateUser = async (req, res) => {
     try {
         const { userId } = req.body;
 
-        await usermodel.findByIdAndUpdate(userId, { isSuspended: false });
+        const user=await usermodel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (user.role === "admin" || user.role === "superadmin") {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot activate admins or superadmins"
+            });
+        }
+
+        
+        user.isSuspended=false;
+        await user.save();
 
         res.json({ success: true, message: "User activated" });
     } catch (err) {

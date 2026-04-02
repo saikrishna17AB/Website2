@@ -23,34 +23,46 @@
         </nav>
     </header>
 
-    <div class="container fade-in">
-        <div class="superadmin-header">
-            <div>
-                <h1>User Administration</h1>
-                <p style="color: var(--text-muted);">Manage high-level access and admin requests.</p>
-            </div>
-            <div id="status-indicator">
-                <span class="badge" style="background: #fee2e2; color: #991b1b; border-radius: 50px; font-weight: 700; padding: 0.5rem 1rem;">FULL ACCESS</span>
+    
+    <!-- MAIN MENU -->
+        <div id="mainMenu">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            
+                <div class="modern-card" style="text-align: center; cursor: pointer; padding: 2rem;" id="viewAdminRequestsBtn">
+                    <div style="width: 60px; height: 60px; background: #fef3c7; border-radius: 15px; display: flex; justify-content: center; align-items: center; margin: 0 auto 1rem; color: #b45309;">
+                        <i data-lucide="shield-alert"></i>
+                    </div>
+                    <h3>Admin Requests</h3>
+                    <p>Review users requesting admin access</p>
+                </div>
+
             </div>
         </div>
 
-        <div class="registry-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email Address</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="users-table">
-                    <!-- Dynamic content from superadmin.js -->
-                </tbody>
-            </table>
+        <!-- ADMIN REQUESTS SECTION -->
+        <div id="requestsSection" style="display:none;">
+            <div style="margin-bottom: 2rem; display:flex; justify-content: space-between;">
+                <h2>Admin Requests</h2>
+                <button id="backFromRequests" class="btn-secondary">Back</button>
+            </div>
+
+            <div class="registry-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table"></tbody>
+                </table>
+            </div>
         </div>
-    </div>
+
+    
 
     <script src="superadmin.js"></script>
     <script>

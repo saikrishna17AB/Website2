@@ -4,7 +4,6 @@ document.querySelector("#sub").addEventListener("click",async (e)=>{
     const email=document.querySelector("#email").value;
     const password=document.querySelector("#passwd").value;
     const role=document.querySelector("#role").value;
-
     
 
     e.preventDefault();

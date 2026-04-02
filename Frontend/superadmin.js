@@ -60,6 +60,20 @@ window.processRequest = async (userId, action) => {
     }
 };
 
+function showSection(section) {
+    document.getElementById("mainMenu").style.display = section === "menu" ? "block" : "none";
+    document.getElementById("requestsSection").style.display = section === "requests" ? "block" : "none";
+}
+
+
+document.getElementById("viewAdminRequestsBtn").onclick = () => {
+    showSection("requests");
+    loadOperatives(); // your existing function
+};
+
+document.getElementById("backFromRequests").onclick = () => {
+    showSection("menu");
+};
 document.getElementById("logout").onclick = () => {
     window.location.href = "login.html";
 };
@@ -67,4 +81,4 @@ document.getElementById("logout").onclick = () => {
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
     loadOperatives();
-});
+});

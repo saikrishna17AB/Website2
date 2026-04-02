@@ -38,6 +38,9 @@ async function loadReports() {
     }
 }
 
+
+const messagebox=document.getElementById("message");
+
 window.selectReport = (id, desc, user, date, remarks, status) => {
 
     
@@ -52,36 +55,38 @@ window.selectReport = (id, desc, user, date, remarks, status) => {
     document.getElementById("statusSelect").value = status.toLowerCase().replace(" ", "-");
 
 
-    const messageBox=document.getElementById("message");
+    
     if (selectedReportStatus === "safe" || selectedReportStatus === "phishing") {
-        document.getElementById("updateReportBtn").disabled = true;
-        messageBox.innerText = "This report is finalized and cannot be updated";
-        messageBox.style.color = "red";
-    } else {
+        
+        document.getElementById("statusSelect").disabled=true;
+        document.getElementById("adminRemarks").disabled=true;
+    } 
+    else {
         document.getElementById("updateReportBtn").disabled = false; 
-        messageBox.innerText = "";
+        document.getElementById("statusSelect").disabled=false;
+        document.getElementById("adminRemarks").disabled=false;
+        
+        messagebox.innerText = "";
     }
 };
+
 
 document.getElementById("updateReportBtn").onclick = async () => {
 
 
-    const isLocked=(selectedReportStatus==="safe" || selectedReportStatus==="phishing");
+    if(selectedReportStatus==="safe" || selectedReportStatus==="phishing"){
 
-    document.getElementById("updateReportBtn").disabled=isLocked;
-
-    document.getElementById("statusSelect").disabled=isLocked;
-    document.getElementById("adminRemarks").disabled=isLocked;
-
-    const messageBox=document.getElementById("message");
-
-    if(isLocked){
-        messageBox.innerText="This report is finalized and cannot be updated";
-        messageBox.style.color="red";
+    
+        document.getElementById("updateReportBtn").disabled = true;
+        messagebox.innerText = "This report is finalized and cannot be updated";
+        messagebox.style.color = "red";
         return;
     }
+
+    
+
     else{
-        messageBox.innerText="";
+        messagebox.innerText="";
     }
     const remarks = document.getElementById("adminRemarks").value;
     const status = document.getElementById("statusSelect").value;
@@ -97,13 +102,14 @@ document.getElementById("updateReportBtn").onclick = async () => {
         });
         const data = await res.json();
         if (data.success) {
-            const messageBox = document.getElementById("message");
 
-            messageBox.innerText = "Report updated successfully";
-            messageBox.style.color = "green";
+            const messagebox = document.getElementById("message");
+
+            messagebox.innerText = "Report updated successfully";
+            messagebox.style.color = "green";
 
             setTimeout(() => {
-                messageBox.innerText = "";
+                messagebox.innerText = "";
             }, 2000);
             loadReports();
             document.getElementById("reportDetails").style.display = "none";
@@ -111,8 +117,8 @@ document.getElementById("updateReportBtn").onclick = async () => {
     } catch (err) {
         const messageBox = document.getElementById("message");
 
-        messageBox.innerText = "Action failed";
-        messageBox.style.color = "red";
+        messagebox.innerText = "Action failed";
+        messagebox.style.color = "red";
     }
 };
 
@@ -166,9 +172,12 @@ document.getElementById("suspendBtn").onclick = async () => {
 
         const data = await res.json();
 
+        messageBox.innerText = data.message;
         if (data.success) {
-            messageBox.innerText = data.message;
             messageBox.style.color = "red";
+        }
+        else{
+            messageBox.style.color = "orange";
         }
     } catch {
         messageBox.innerText = "Action failed";
@@ -190,9 +199,13 @@ document.getElementById("activateBtn").onclick = async () => {
 
         const data = await res.json();
 
+        messageBox.innerText = data.message;
         if (data.success) {
-            messageBox.innerText = "User activated successfully";
+            
             messageBox.style.color = "green";
+        }
+        else{
+            messageBox.style.color = "orange";
         }
     } catch {
         messageBox.innerText = "Action failed";
