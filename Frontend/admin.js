@@ -41,7 +41,7 @@ async function loadReports() {
 window.selectReport = (id, desc, user, date, remarks, status) => {
 
     
-    selectedReportStatus=status.toLowerCase;
+    selectedReportStatus=status.toLowerCase();
     selectedReportId = id;
     document.getElementById("reportDetails").style.display = "block";
     document.getElementById("rID").innerText = id;
@@ -167,7 +167,7 @@ document.getElementById("suspendBtn").onclick = async () => {
         const data = await res.json();
 
         if (data.success) {
-            messageBox.innerText = "User suspended successfully";
+            messageBox.innerText = data.message;
             messageBox.style.color = "red";
         }
     } catch {

@@ -380,10 +380,28 @@ export const suspendUser = async (req, res) => {
     try {
         const { userId } = req.body;
 
-        await User.findByIdAndUpdate(userId, { isSuspended: true });
+        const user=await usermodel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (user.role === "admin" || user.role === "superadmin") {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot suspend admins or superadmins"
+            });
+        }
+
+        user.isSuspended=true;
+        await user.save();
 
         res.json({ success: true, message: "User suspended" });
     } catch (err) {
+        console.log(err)
         res.status(500).json({ success: false, message: "Server error" });
     }
 };
@@ -392,7 +410,7 @@ export const activateUser = async (req, res) => {
     try {
         const { userId } = req.body;
 
-        await User.findByIdAndUpdate(userId, { isSuspended: false });
+        await usermodel.findByIdAndUpdate(userId, { isSuspended: false });
 
         res.json({ success: true, message: "User activated" });
     } catch (err) {

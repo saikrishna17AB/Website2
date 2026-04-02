@@ -17,4 +17,4 @@ authRouter.post('/rejectadmin',adminapprove,requireRole('superadmin'),RejectAdmi
 authRouter.post('/suspenduser',userAuth,requireRole('admin'),suspendUser);
 authRouter.post('/activateuser',userAuth,requireRole('admin'),activateUser);
 
-export default authRouter;
+export default authRouter;  

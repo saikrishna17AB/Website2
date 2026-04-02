@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded",async ()=>{
 const logout=document.querySelector("#logout");
 const checkbtn=document.querySelector("#phishingsite");
 const viewreport=document.querySelector("#viewreports");
+const passwordbreach=document.querySelector("#breachbutton");
 
 
 
@@ -109,6 +110,10 @@ report.addEventListener("click",async()=>{
 })
 checkbtn.addEventListener("click",async ()=>{
     window.location.href="suspiciousurl.html";
+})
+
+passwordbreach.addEventListener("click",async ()=>{
+    window.location.href="passwordbreach.html";
 })
 
 viewreport.addEventListener("click",loadReports);
