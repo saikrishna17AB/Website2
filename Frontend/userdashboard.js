@@ -1,24 +1,14 @@
-document.addEventListener("DOMContentLoaded",async ()=>{
-    try{
-        const response=await fetch("http://localhost:4000/api/user/check-auth",{
-            method:"GET",credentials:"include"
-        });
-        if(!response.ok){
-            window.location.href="login.html";
-            console.log('Error');
-            return;
-        }
-        const data=await response.json();
-        if(!data.success){
-            window.location.href="login.html";
-            console.log("Error");
-        }
-    }
-    catch(error){
-        window.location.href="login.html";
-    }
-});
 
+
+const toggleBtn = document.getElementById("toggleChat");
+const chatSection = document.getElementById("chatSection");
+
+toggleBtn.onclick = () => {
+    chatSection.classList.toggle("hidden");
+
+    toggleBtn.textContent =
+        chatSection.classList.contains("hidden") ? "Show Chat" : "Hide Chat";
+};
 
 const logout=document.querySelector("#logout");
 const checkbtn=document.querySelector("#phishingsite");
@@ -149,3 +139,122 @@ requestadmin.addEventListener("click",async ()=>{
         adminmsg.style.color="red";
     }
 })
+
+
+
+const socket = io("http://localhost:4000", {
+    withCredentials: true
+});
+async function loadMessages() {
+    try {
+        const res = await fetch("http://localhost:4000/api/chat/messages", {
+            credentials: "include"
+        });
+
+        const data = await res.json();
+
+        if (!data.success) return;
+
+        const chatBox = document.getElementById("chatMessages");
+
+        chatBox.innerHTML = ""; // clear first
+
+        data.messages.forEach(msg => displayMessage(msg));
+        chatBox.scrollTop=chatBox.scrollHeight;
+    } catch (err) {
+        console.log("Error loading messages");
+    }
+}
+
+function displayMessage(msg) {
+    const chatBox = document.getElementById("chatMessages");
+
+    const div = document.createElement("div");
+    div.classList.add("message");
+
+    if(msg.name===window.currentUser?.name){
+        div.classList.add("myMessage");
+    }
+    else{
+        div.classList.add("otherMessage");
+    }
+
+    if (msg.role === "admin") {
+        div.classList.add("admin");
+    } else {
+        div.classList.add("user");
+    }
+
+    // Highlight phishing alerts
+    if (msg.text.toLowerCase().includes("phishing") || msg.text.toLowerCase().includes("fraud")) {
+        div.classList.add("alert");
+    }
+
+    if(msg.role==="admin"){
+        div.innerHTML = `<strong>${msg.name}</strong>
+                     <span class="role-tag">(${msg.role})</span>:
+                        ${msg.text}`;
+    }
+    else{
+        div.innerHTML = `<strong>${msg.name}</strong>:
+                        ${msg.text}`;
+    }
+
+    chatBox.appendChild(div);
+}
+
+const sendBtn = document.getElementById("sendBtn");
+const input = document.getElementById("chatInput");
+
+sendBtn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return;
+
+    socket.emit("sendMessage", {
+        text,
+        name: window.currentUser?.name || "Anonymous",
+        role: window.currentUser?.role || "user"
+    });
+
+    input.value = "";
+});
+input.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter"){
+        e.preventDefault();
+        sendBtn.click();
+    }
+});
+
+socket.on("receiveMessage", (msg) => {
+    displayMessage(msg);
+
+    const chatBox=document.getElementById("chatMessages");
+    chatBox.scrollTop=chatBox.scrollHeight;
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded",async ()=>{
+    try{
+        const response=await fetch("http://localhost:4000/api/user/check-auth",{
+            method:"GET",credentials:"include"
+        });
+        if(!response.ok){
+            window.location.href="login.html";
+            console.log('Error');
+            return;
+        }
+        const data=await response.json();
+        if(!data.success){
+            window.location.href="login.html";
+            console.log("Error");
+        }
+
+        window.currentUser=data.user;
+        loadMessages();
+    }
+    catch(error){
+        window.location.href="login.html";
+    }
+});

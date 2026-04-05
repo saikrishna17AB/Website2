@@ -246,6 +246,7 @@ export const issessionactive=async (req,res)=>{           //Before calling this 
         success:true,
         user:{
             id:req.user._id,
+            name:req.user.name,
             role:req.user.role,
             email:req.user.email
         }

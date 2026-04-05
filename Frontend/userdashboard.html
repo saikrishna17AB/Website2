@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="userdashboard.css">
 </head>
+
 <body>
     <header>
         <a href="userdashboard.html" class="nav-brand">CYBER SENTINEL</a>
@@ -25,7 +26,7 @@
         </nav>
     </header>
 
-    <div class="container fade-in">
+    
         <div style="margin-bottom: 4rem;">
             <h1>Your Dashboard</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem;">Welcome back! Access your security tools and reports below.</p>
@@ -70,6 +71,28 @@
             </div>
         </div>
 
+
+        <!-- CHAT SECTION -->
+        <div class="chat-wrapper">
+
+            <div class="chat-header-bar">
+                <h2>⚠️ Community Threat Feed</h2>
+                <button id="toggleChat" class="btn-secondary">Show Chat</button>
+            </div>
+
+            <div id="chatSection" class="chat-section hidden">
+
+                <div id="chatMessages" class="chat-messages"></div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Report suspicious activity..." />
+                    <button id="sendBtn">Send</button>
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="reports-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
                 <h2>Your Reports</h2>
@@ -107,7 +130,9 @@
         </div>
     </div>
 
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>  
     <script src="userdashboard.js"></script>
+    
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
