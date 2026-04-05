@@ -48,14 +48,15 @@ window.processRequest = async (userId, action) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ userid: userId })
+            body: JSON.stringify({ userId })
         });
 
         const data = await response.json();
         if (data.success) {
             loadOperatives();
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Action failed", error);
     }
 };

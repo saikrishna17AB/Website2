@@ -169,6 +169,11 @@ async function loadMessages() {
 function displayMessage(msg) {
     const chatBox = document.getElementById("chatMessages");
 
+    const time = new Date(msg.createdAt).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+    });
+
     const div = document.createElement("div");
     div.classList.add("message");
 
@@ -193,11 +198,14 @@ function displayMessage(msg) {
     if(msg.role==="admin"){
         div.innerHTML = `<strong>${msg.name}</strong>
                      <span class="role-tag">(${msg.role})</span>:
-                        ${msg.text}`;
+                        ${msg.text}
+                        <span class="msg-time">${time}</span>`
+                        
     }
     else{
         div.innerHTML = `<strong>${msg.name}</strong>:
-                        ${msg.text}`;
+                        ${msg.text}
+                        <span class="msg-time">${time}</span>`;
     }
 
     chatBox.appendChild(div);
