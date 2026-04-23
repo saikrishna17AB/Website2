@@ -208,8 +208,39 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-secondary:hover {
-  background: #e2e8f0;
-  color: var(--text-main);
+    background: #e2e8f0;
+    color: var(--text-main);
+}
+
+.btn-primary:active, .btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* --- Loading Spinner --- */
+.loading-spinner {
+    padding: 2rem;
+    text-align: center;
+    color: var(--primary-purple);
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loading-spinner::before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f1f5f9;
+    border-top: 3px solid var(--primary-purple);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* --- Status Badges --- */

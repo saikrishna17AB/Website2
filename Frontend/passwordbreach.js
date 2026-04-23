@@ -81,7 +81,22 @@ checkBtn.onclick = () => {
     checkPassword(password);
 };
 
-// ⬅ Back button
+
 document.getElementById("backBtn").onclick = () => {
     window.location.href = "userdashboard.html";
-};
+};
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch("http://localhost:4000/api/user/check-auth", {
+            method: "GET", credentials: "include"
+        });
+        const data = await response.json();
+        if (!data.success) {
+            window.location.href = "login.html";
+        }
+    } catch (error) {
+        window.location.href = "login.html";
+    }
+});

@@ -376,7 +376,7 @@ export const RejectAdmin=async (req,res)=>{
         user.role="user";
         await user.save();
 
-        return res.status(200).json({success:false,message:"Admin Request rejected"});
+        return res.status(200).json({success:true,message:"Admin Request rejected"});
 
 
     }

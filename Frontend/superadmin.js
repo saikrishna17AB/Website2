@@ -48,7 +48,7 @@ window.processRequest = async (userId, action) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ userId })
+            body: JSON.stringify({ userid: userId })
         });
 
         const data = await response.json();
@@ -80,6 +80,19 @@ document.getElementById("logout").onclick = () => {
 };
 
 // Initialize
-document.addEventListener("DOMContentLoaded", () => {
-    loadOperatives();
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch("http://localhost:4000/api/user/check-auth", {
+            method: "GET", credentials: "include"
+        });
+        const data = await response.json();
+        if (!data.success) {
+            window.location.href = "login.html";
+        }
+        loadOperatives();
+    } catch (error) {
+        window.location.href = "login.html";
+    }
 });

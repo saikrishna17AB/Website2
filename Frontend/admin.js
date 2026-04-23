@@ -222,7 +222,17 @@ document.getElementById("logout").onclick = () => window.location.href = "login.
 
 
 
-// Init
-document.addEventListener("DOMContentLoaded", () => {
-    showSection("menu");
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch("http://localhost:4000/api/user/check-auth", {
+            method: "GET", credentials: "include"
+        });
+        const data = await response.json();
+        if (!data.success) {
+            window.location.href = "login.html";
+        }
+        showSection("menu");
+    } catch (error) {
+        window.location.href = "login.html";
+    }
 });
