@@ -2,6 +2,9 @@
 let selectedReportId = null;
 let selectedReportStatus=null;
 let selectedUserId=null;
+let allUsers = []; // store fetched users
+// let currentSort = "az";
+let currentSort = "recent";
 // UI Toggles
 function showSection(sectionId) {
     document.getElementById("reportsSection").style.display = sectionId === "reports" ? "block" : "none";
@@ -122,10 +125,23 @@ document.getElementById("updateReportBtn").onclick = async () => {
     }
 };
 
+function toggleUserDetails(show) {
+    const details = document.getElementById("uDetails");
+    const layout = document.querySelector(".users-layout");
+
+    if (show) {
+        details.style.display = "block";
+        layout.style.gridTemplateColumns = "300px 1fr";
+    } else {
+        details.style.display = "none";
+        layout.style.gridTemplateColumns = "300px";
+    }
+}
 
 
 // Users Logic
 async function loadUsers() {
+    toggleUserDetails(false);
     const list = document.getElementById("userList");
     list.innerHTML = "<li>Retrieving operatives...</li>";
 
@@ -134,26 +150,123 @@ async function loadUsers() {
         const data = await res.json();
         if (data.success) {
             list.innerHTML = "";
-            data.users.forEach(user => {
-                const li = document.createElement("li");
-                li.className = "user-item";
-                li.innerHTML = `<span>${user.name}</span> <small>${user.email}</small>`;
-                
-                li.onclick = () => {
-                    selectedUserId=user._id;
-                    document.getElementById("uDetails").style.display = "block";
-                    document.getElementById("uName").innerText = user.name;
-                    document.getElementById("uEmail").innerText = user.email;
-                    document.getElementById("uRole").innerText = user.role;
-                };
-                list.appendChild(li);
-            });
+            allUsers = data.users;   // store users
+            renderUsers(allUsers);   // render initially
+            
         }
     } catch (err) {
         list.innerHTML = "<li>Access Denied</li>";
     }
 }
 
+
+
+function renderUsers(users) {
+
+    const searchValue = document.getElementById("userSearch").value.toLowerCase();
+    const list = document.getElementById("userList");
+    list.innerHTML = "";
+
+    if (users.length === 0) {
+        list.innerHTML = "<li>No users found</li>";
+        return;
+    }
+
+    let processedUsers = users
+    .filter(user => user.role === "user") // remove admins
+    .filter(user =>
+        user.email.toLowerCase().includes(searchValue) ||
+        user.name.toLowerCase().includes(searchValue)
+    );
+
+    // 2. Sort
+    if (currentSort === "recent") {
+        processedUsers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (currentSort === "oldest") {
+        processedUsers.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (currentSort === "az") {
+        processedUsers.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (currentSort === "za") {
+        processedUsers.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    // 3. Take only top 10
+    processedUsers = processedUsers.slice(0, 10);
+
+    
+    processedUsers.forEach(user => {
+        const li = document.createElement("li");
+        li.className = "user-item";
+
+        const isSuspended = user.isSuspended === true;
+        console.log(isSuspended);
+
+        const statusBadge = isSuspended
+            ? `<span class="badge suspended">Suspended</span>`
+            : `<span class="badge active">Active</span>`;
+
+        li.innerHTML = `
+            <div class="user-info">
+                <span>${user.name}</span>
+                <small>${user.email}</small>
+            </div>
+            ${statusBadge}
+        `;
+
+        li.onclick = () => {
+
+            if (selectedUserId === user._id) {
+                selectedUserId = null;
+                toggleUserDetails(false);
+                return;
+            }
+            selectedUserId = user._id;
+
+            document.getElementById("userActionMessage").innerText = "";
+            toggleUserDetails(true);
+            document.getElementById("uName").innerText = user.name;
+            document.getElementById("uEmail").innerText = user.email;
+            document.getElementById("uRole").innerText = user.role;
+        };
+
+        list.appendChild(li);
+    });
+}
+
+
+// document.getElementById("sortUsers").addEventListener("change", (e) => {
+//     currentSort = e.target.value;
+
+//     // re-render based on current filtered list
+//     const searchValue = document.getElementById("userSearch").value.toLowerCase();
+
+//     const filteredUsers = allUsers.filter(user =>
+//         user.email.toLowerCase().includes(searchValue) ||
+//         user.name.toLowerCase().includes(searchValue)
+//     );
+
+//     renderUsers(filteredUsers);
+// });
+// document.getElementById("userSearch").addEventListener("input", (e) => {
+//     const searchValue = e.target.value.toLowerCase();
+
+//     const filteredUsers = allUsers.filter(user =>
+//         user.email.toLowerCase().includes(searchValue) ||
+//         user.name.toLowerCase().includes(searchValue)
+//     );
+
+//     renderUsers(filteredUsers);
+// });
+
+
+document.getElementById("sortUsers").addEventListener("change", (e) => {
+    currentSort = e.target.value;
+    renderUsers(allUsers);
+});
+
+document.getElementById("userSearch").addEventListener("input", () => {
+    renderUsers(allUsers);
+});
 
 
 const messageBox = document.getElementById("userActionMessage");
@@ -175,16 +288,29 @@ document.getElementById("suspendBtn").onclick = async () => {
         messageBox.innerText = data.message;
         if (data.success) {
             messageBox.style.color = "red";
+            await loadUsers();
         }
         else{
             messageBox.style.color = "orange";
+            await loadUsers();
         }
     } catch {
         messageBox.innerText = "Action failed";
         messageBox.style.color = "red";
+        await loadUsers();
     }
 };
 
+
+document.getElementById("closeUserDetails").onclick = () => {
+    selectedUserId = null;
+
+    document.getElementById("uName").innerText = "";
+    document.getElementById("uEmail").innerText = "";
+    document.getElementById("uRole").innerText = "";
+
+    toggleUserDetails(false);
+};
 
 document.getElementById("activateBtn").onclick = async () => {
     if (!selectedUserId) return;
@@ -203,13 +329,16 @@ document.getElementById("activateBtn").onclick = async () => {
         if (data.success) {
             
             messageBox.style.color = "green";
+            await loadUsers();
         }
         else{
             messageBox.style.color = "orange";
+            await loadUsers();
         }
     } catch {
         messageBox.innerText = "Action failed";
         messageBox.style.color = "red";
+        await loadUsers();
     }
 };
 

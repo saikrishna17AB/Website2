@@ -1,12 +1,24 @@
-/* Admin Specific Styles */
+
+
+
+
+/* ===== User List Styling ===== */
+#userList {
+    list-style: none;
+    padding: 0;
+}
+
+/* Each user row */
 .user-item {
     background: #f1f5f9;
-    padding: 1rem;
+    padding: 0.8rem 1rem;
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: var(--transition);
+
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;   /* 👈 key change */
+    align-items: center;              /* 👈 vertical alignment */
 }
 
 .user-item:hover {
@@ -14,11 +26,58 @@
     transform: scale(1.02);
 }
 
-#userList {
-    list-style: none;
-    padding: 0;
+/* User text block */
+.user-info {
+    display: flex;
+    flex-direction: column;
 }
 
+.user-info span {
+    font-weight: 600;
+}
+
+.user-info small {
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+
+.users-layout {
+    display: grid;
+    grid-template-columns: 500px 1fr; 
+    gap: 3rem;
+    align-items: start;
+}
+
+.user-list-panel {
+    width: 100%;
+}
+
+.user-details-panel {
+    width: 100%;
+}
+/* ===== Badge Styling ===== */
+.badge {
+    padding: 4px 10px;
+    border-radius: 999px;  /* 👈 pill style */
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Active */
+.badge.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Suspended */
+.badge.suspended {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ===== Report Table (unchanged) ===== */
 #reportsTableBody tr td.badge-status {
     font-weight: 600;
     text-transform: uppercase;

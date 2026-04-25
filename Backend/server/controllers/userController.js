@@ -41,7 +41,7 @@ export const getAdminRequests= async (req,res)=>{
 export const getAllUsers=async (req,res)=>{
     try{
         const users = await usermodel.find().select(
-            "name email role isAccountVerified adminRequest"
+            "name email role isAccountVerified adminRequest isSuspended createdAt"
         );
 
         return res.status(200).json({

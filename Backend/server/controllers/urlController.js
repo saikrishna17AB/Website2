@@ -1,9 +1,34 @@
 
+import UrlThreat from "../models/urlModel.js";
+import EmailThreat from "../models/emailModel.js";
+
 export const checkurl=async (req,res)=>{
     const {url}=req.body;
     if(!url){
         return res.status(400).json({success:false,message:"URL is required"});
     }
+
+
+    const normalizedUrl = url
+            .toLowerCase()
+            .replace("https://", "")
+            .replace("http://", "")
+            .replace("www.", "")
+            .split("/")[0];
+    const existingThreat = await UrlThreat.findOne({
+        url: normalizedUrl
+    });
+
+    if (existingThreat) {
+        return res.json({
+            success: true,
+            score: 0,
+            status: "Phishing",
+            source: "database",
+            threatType: existingThreat.threatType
+        });
+    }
+
     let score=5;
     let status='Safe';
     const lowerurl=url.toLowerCase();
@@ -51,13 +76,27 @@ export const checkurl=async (req,res)=>{
         else{
             status='Safe';
         }
-        res.json({success:true,score,status});
+
+        if (status === "Phishing") {
+            await UrlThreat.findOneAndUpdate(
+                { url: normalizedUrl },
+                {
+                    url: normalizedUrl, 
+                    threatType: "auto-detected",
+                    $inc: { reportedCount: 1 },
+                    $set: { lastReportedAt: new Date() }
+                },
+                { upsert: true,new: true }
+            );
+        }
+
+        res.json({success:true,score,status,source:"rules"});
     }
     catch(error){
         res.status(500).json({success:failure,message:error.message});
     }
 
-}
+};
 
 export const checkemail=async (req,res)=>{
     try{
@@ -66,11 +105,26 @@ export const checkemail=async (req,res)=>{
             return res.status(400).json({ success: false, message: "Email is required" });
         }
 
-        let score=5;
-        let localpart=email.split('@')[0];
-        let domainpart=email.split('@')[1];
+        const normalizedEmail = email.toLowerCase().trim();
 
-        if(!email.includes('@') || !domainpart){
+        const existing = await EmailThreat.findOne({ email: normalizedEmail });
+
+        if (existing) {
+            return res.json({
+                success: true,
+                status: "Phishing",
+                score: 0,
+                source: "database",
+                breachSource: existing.breachSource
+            });
+        }
+
+        let score=5;
+        let localpart=normalizedEmail.split('@')[0];
+        let domainpart=normalizedEmail.split('@')[1];
+
+
+        if(!normalizedEmail.includes('@') || !domainpart){
             score-=5;
         }
         //If IP address is there as domain
@@ -79,7 +133,7 @@ export const checkemail=async (req,res)=>{
             score-=4;
         }
 
-        if(email.length>50){
+        if(normalizedEmail.length>50){
             score-=1;
         }
 
@@ -138,12 +192,25 @@ export const checkemail=async (req,res)=>{
         else if(score<=3){
             status="Suspicious";
         }
+
+        if (status === "Phishing") {
+            await EmailThreat.findOneAndUpdate(
+                { email: normalizedEmail },
+                {
+                    email: normalizedEmail, // 🔥 IMPORTANT
+                    breachSource: "auto-detected",
+                    $inc: { reportedCount: 1 },
+                    $set: { lastReportedAt: new Date() }
+                },
+                { upsert: true, new: true }
+            );
+        }
         res.status(200).json({
-            success:true,email,score,status
+            success:true,email,score,status,source:"rules"
         })
 
     }
     catch(error){
         res.status(500).json({ success: false, message: error.message });
     }
-}
+};
