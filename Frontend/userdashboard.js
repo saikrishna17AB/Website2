@@ -1,82 +1,61 @@
-/* 
-    CYBER SENTINEL - USER DASHBOARD LOGIC
-    High-Reliability Version with Priority Activation
-*/
 
-/// --- Global State ---
 let socket;
 let reportsData = [];
 
-// --- Initialization ---
 async function initializeDashboard() {
-    console.log("%c🚀 CYBER SENTINEL: Dashboard Booting...", "color: #a855f7; font-weight: bold; font-size: 1.2rem;");
-
-    // 1. Setup Element Listeners IMMEDIATELY
-    // We do this first so the UI is responsive even while auth/chat loads
     setupEventListeners();
-
-    // 2. Auth Check
     const authSuccess = await checkAuth();
     if (!authSuccess) {
-        console.warn("🛑 Session invalid, redirecting to login...");
+        console.warn("Session invalid, redirecting to login...");
         return;
     }
-
-    // 3. Initialize Socket.IO & Chat
     initializeChat();
-
-    console.log("%c✅ CYBER SENTINEL: Core Systems Online.", "color: #22c55e; font-weight: bold;");
 }
 
-// --- Auth & Session ---
 async function checkAuth() {
     try {
         const response = await fetch("http://localhost:4000/api/user/check-auth", {
             method: "GET", credentials: "include"
         });
-        if (!response.ok) throw new Error("Auth endpoint unreachable");
+        if (!response.ok) 
+            throw new Error("Auth endpoint unreachable");
 
         const data = await response.json();
-        if (!data.success) throw new Error("Authentication rejected");
+        if (!data.success) 
+            throw new Error("Authentication rejected");
 
         window.currentUser = data.user;
-        console.log(`👤 Welcome back, ${window.currentUser?.name} [${window.currentUser?.role}]`);
+
+        document.getElementById("profileName").innerText = data.user.name;
+        document.getElementById("profileEmail").innerText = data.user.email;
         return true;
-    } catch (error) {
-        console.warn("🔐 Auth Error:", error.message);
+    } 
+    catch(error){
+        console.warn("Auth Error:", error.message);
         window.location.href = "login.html";
         return false;
     }
 }
-
-// --- Event Listeners ---
 function setupEventListeners() {
-    console.log("⚡ Binding interactive elements...");
-
-    // Helper to bind with extra safety and logging
     const bindSafe = (id, name, action) => {
         const el = document.getElementById(id);
         if (el) {
-            // Using .onclick for simplicity and to prevent multiple listeners
             el.addEventListener("click",(e)=>{
-                console.log(`🖱️ Action: ${name}`);
+                console.log(`Action: ${name}`);
                 action(e);
             });
-            console.log(`  [OK] ${name} (${id})`);
             return el;
-        } else {
-            console.warn(`  [FAIL] ${name} (ID: ${id}) NOT FOUND`);
+        } 
+        else{
             return null;
         }
     };
 
-    // Main Dashboard Buttons
     bindSafe("logout", "Logout", handleLogout);
     bindSafe("phishingsite", "URL Check", () => window.location.href = "suspiciousurl.html");
     bindSafe("breachbutton", "Breach Check", () => window.location.href = "passwordbreach.html");
     bindSafe("report", "Report Incident", (e) => {
         e.preventDefault();
-        console.log("🚀 Redirecting to Report Page...");
         window.location.href = "report.html";
     });
     bindSafe("viewreports", "View Reports", (e) => {
@@ -92,7 +71,6 @@ function setupEventListeners() {
         handleAdminRequest();
     });
 
-    // Chat UI Toggles
     const chatFab = document.getElementById("toggleChatFab");
     const closeChat = document.getElementById("closeChat");
     const chatPanel = document.getElementById("chatPanel");
@@ -102,32 +80,56 @@ function setupEventListeners() {
             e.preventDefault();
             chatPanel.classList.toggle("active");
             const dot = document.querySelector(".notification-dot");
-            if (dot) dot.style.display = "none";
+            if(dot) 
+                dot.style.display = "none";
+            
+            if(chatPanel.classList.contains("active")) {
+                setTimeout(() => {
+                    const chatBox = document.getElementById("chatMessages");
+                    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+                }, 50);
+            }
         };
     }
-    if (closeChat && chatPanel) {
+    if(closeChat && chatPanel){
         closeChat.onclick = (e) => {
             e.preventDefault();
             chatPanel.classList.remove("active");
         };
     }
+
+    const profileBtn = document.getElementById("profileBtn");
+    const dropdown = document.getElementById("profileDropdown");
+
+    if(profileBtn && dropdown){
+        profileBtn.onclick = () => {
+            dropdown.classList.toggle("active");
+        };
+
+        document.addEventListener("click", (e) => {
+            if (!profileBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove("active");
+            }
+        });
+    }
 }
 
 
-// --- Handlers ---
 async function handleLogout() {
-    try {
+    try{
         await fetch("http://localhost:4000/api/auth/logout", { method: "GET", credentials: "include" });
-    } finally {
+    } 
+    finally {
         window.location.href = "login.html";
     }
 }
 
 async function handleAdminRequest() {
     const adminMsg = document.getElementById("adminmsg");
-    if (adminMsg) adminMsg.innerText = "Requesting clearance...";
+    if (adminMsg) 
+        adminMsg.innerText = "Requesting clearance...";
 
-    try {
+    try{
         const response = await fetch("http://localhost:4000/api/auth/requestadmin", {
             method: "POST",
             credentials: "include"
@@ -137,23 +139,24 @@ async function handleAdminRequest() {
             adminMsg.innerText = data.message;
             adminMsg.style.color = data.success ? "var(--success-green)" : "var(--danger-red)";
         }
-    } catch (error) {
+    } 
+    catch (error) {
         if (adminMsg) adminMsg.innerText = "Communication failure with security council.";
     }
 }
 
-// --- Reports ---
 async function loadReports() {
-    console.log("🔍 Fetching intelligence reports...");
     const reportSection = document.getElementById("reportsection");
     const hideBtn = document.getElementById("Goback");
     const list = document.getElementById("reportlist");
 
-    if (reportSection) reportSection.style.display = "block";
-    if (hideBtn) hideBtn.style.display = "inline-block";
-    if (list) list.innerHTML = `<div class="loading-spinner">Decrypting data...</div>`;
+    if (reportSection) 
+        reportSection.style.display = "block";
+    if (hideBtn) 
+        hideBtn.style.display = "inline-block";
+    if (list) 
+        list.innerHTML = `<div class="loading-spinner">Decrypting data...</div>`;
 
-    // Smooth scroll to reports
     if (reportSection) {
         reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -190,8 +193,7 @@ async function loadReports() {
                         </div>
                         <span class="badge ${entry.status === 'phishing' ? 'badge-danger' : 'badge-safe'}">${entry.status}</span>
                     </div>
-                    <div style="font-size: 0.85rem; margin-top: 5px; color: var(--text-muted);">${entry.reportType}: ${entry.content}</div>
-                `;
+                    <div style="font-size: 0.85rem; margin-top: 5px; color: var(--text-muted);">${entry.reportType}: ${entry.content}</div>`;
 
                 item.onmouseover = () => item.style.background = "#f8fafc";
                 item.onmouseout = () => item.style.background = "transparent";
@@ -199,10 +201,11 @@ async function loadReports() {
                 list.appendChild(item);
             });
 
-            // Show details of the first report by default if available
-            if (reportsData.length > 0) showReportDetails(0);
+            if (reportsData.length > 0) 
+                showReportDetails(0);
         }
-    } catch (err) {
+    } 
+    catch (err) {
         console.error("Report Fetch Error:", err);
         if (list) list.innerHTML = "<li style='color: var(--danger-red);'>Error connecting to reports database.</li>";
     }
@@ -224,7 +227,6 @@ function showReportDetails(index) {
         const el = document.getElementById(id);
         if (el) {
             el.innerText = value;
-            // Add alert style to status if phishing
             if (id === "dStatus") {
                 el.style.color = value === "phishing" ? "var(--danger-red)" : "var(--success-green)";
             }
@@ -235,22 +237,21 @@ function showReportDetails(index) {
 function toggleReportsSection() {
     const reportSection = document.getElementById("reportsection");
     const hideBtn = document.getElementById("Goback");
-    if (reportSection) reportSection.style.display = "none";
-    if (hideBtn) hideBtn.style.display = "none";
+    if (reportSection) 
+        reportSection.style.display = "none";
+    if (hideBtn) 
+        hideBtn.style.display = "none";
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- Chat Logic ---
 function initializeChat() {
     if (typeof io === 'undefined') {
-        console.warn("⏳ Waiting for Socket.io library...");
         setTimeout(initializeChat, 1000);
         return;
     }
 
     if (socket) return;
 
-    console.log("📡 Connecting to live threat feed...");
     socket = io("http://localhost:4000", { withCredentials: true });
     loadMessages();
 
@@ -268,7 +269,9 @@ function initializeChat() {
             });
             input.value = "";
         };
-        input.onkeydown = (e) => { if (e.key === "Enter") sendBtn.click(); };
+        input.onkeydown = (e) => { if (e.key === "Enter") 
+            sendBtn.click(); 
+        };
     }
 
     socket.on("receiveMessage", (msg) => {
@@ -295,18 +298,21 @@ async function loadMessages() {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
-    } catch (err) { /* Silent fail */ }
+    } 
+    catch (err) { }
 }
 
 function displayMessage(msg) {
     const chatBox = document.getElementById("chatMessages");
-    if (!chatBox) return;
+    if (!chatBox) 
+        return;
 
     const time = new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const div = document.createElement("div");
     div.classList.add("message");
     div.classList.add(msg.name === window.currentUser?.name ? "myMessage" : "otherMessage");
-    if (msg.role === "admin") div.classList.add("admin");
+    if (msg.role === "admin") 
+        div.classList.add("admin");
 
     if (msg.text.toLowerCase().includes("phishing") || msg.text.toLowerCase().includes("fraud")) {
         div.classList.add("alert");
@@ -324,7 +330,7 @@ function displayMessage(msg) {
 document.getElementById("passwordStrengthBtn").addEventListener("click", () => {
     window.location.href = "passwordstrength.html";
 });
-// --- Execution Entry Point ---
+
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initializeDashboard);
 } else {

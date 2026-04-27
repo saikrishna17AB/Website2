@@ -12,11 +12,6 @@ const urlThreatSchema = new mongoose.Schema({
         enum: ["phishing", "malware", "spam", "suspicious"],
         default: "suspicious"
     },
-    riskLevel: {
-        type: String,
-        enum: ["low", "medium", "high"],
-        default: "medium"
-    },
     reportedCount: {
         type: Number,
         default: 1

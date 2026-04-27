@@ -8,7 +8,6 @@ function validateEmail(email) {
 }
 btn.addEventListener("click", async (e) => {
     e.preventDefault();
-
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("passwd").value;
@@ -49,12 +48,14 @@ btn.addEventListener("click", async (e) => {
             setTimeout(() => {
                 window.location.href = "login.html";  
             }, 1);
-        } else {
+        } 
+        else {
             message.innerText = data.message;
             message.style.color = "red";
         }
 
-    } catch (error) {
+    } 
+    catch (error) {
         message.innerText = "Server error";
         message.style.color = "red";
     }

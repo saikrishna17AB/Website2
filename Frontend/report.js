@@ -1,19 +1,12 @@
-/* 
-    CYBER SENTINEL - REPORT SUBMISSION LOGIC
-    High-Reliability Version
-*/
-
 function validateInput(type, content) {
     if (type === "email") {
         const emailregex = /^\S+@\S+\.\S+$/;
         return emailregex.test(content);
     }
-
     if (type === "phone") {
         const phoneregex = /^[6-9][0-9]{9}$/;
         return phoneregex.test(content);
     }
-
     if (type === "url") {
         try {
             const parsed = new URL(content);
@@ -25,9 +18,7 @@ function validateInput(type, content) {
     return false;
 }
 
-// --- Initialization ---
 function initializeReportForm() {
-    console.log("%c🚀 CYBER SENTINEL: Report System Booting...", "color: #0ea5e9; font-weight: bold;");
 
     const reportForm = document.getElementById("reportform");
     const typeSelect = document.getElementById("type");
@@ -35,15 +26,15 @@ function initializeReportForm() {
     const backBtn = document.getElementById("Goback");
 
     if (!reportForm) {
-        console.warn("⚠️ [SKIPPING] Report form elements missing in current DOM view.");
+        console.warn("Report form elements missing in current DOM view.");
         return;
     }
 
-    // 1. Setup Type Switcher
+    // Setup Type Switcher
     if (typeSelect && contentInput) {
         typeSelect.onchange = () => {
             const type = typeSelect.value;
-            console.log(`🏷️ Context Shift: ${type}`);
+            console.log(` Context Shift: ${type}`);
             if (type === "email") {
                 contentInput.placeholder = "Enter sender email address";
             } else if (type === "phone") {
@@ -54,10 +45,10 @@ function initializeReportForm() {
         };
     }
 
-    // 2. Setup Form Submission
+    // Setup Form Submission
     reportForm.onsubmit = async (e) => {
         e.preventDefault();
-        console.log("📤 Initiating intelligence transmission...");
+        console.log("Initiating intelligence transmission");
 
         const submitBtn = reportForm.querySelector('button[type="submit"]');
         const type = document.getElementById("type").value;
@@ -66,7 +57,7 @@ function initializeReportForm() {
         const message = document.getElementById("msg");
 
         if (!validateInput(type, content)) {
-            console.warn("⚠️ Validation abort: Invalid data format.");
+            console.warn("Validation abort: Invalid data format.");
             if (message) {
                 message.innerText = `Protocol Error: Invalid ${type} format.`;
                 message.className = "feedback error";
@@ -90,30 +81,31 @@ function initializeReportForm() {
             const data = await response.json();
 
             if (data.success) {
-                console.log("✅ Transmission confirmed.");
                 if (message) {
-                    message.innerText = "Intelligence transmitted successfully.";
+                    message.innerText = "Reported successfully.";
                     message.className = "feedback success";
                 }
                 reportForm.reset();
-                // Redirect back after a short delay for feedback
                 setTimeout(() => {
                     window.location.href = "userdashboard.html";
                 }, 1500);
-            } else {
-                console.warn(`❌ Transmission rejected: ${data.message}`);
+            } 
+            else{
+                console.warn(`Transmission rejected: ${data.message}`);
                 if (message) {
-                    message.innerText = `Transmission rejected: ${data.message}`;
+                    message.innerText = `Report rejected: ${data.message}`;
                     message.className = "feedback error";
                 }
             }
-        } catch (error) {
-            console.error("🔥 Connectivity Failure:", error);
+        } 
+        catch (error) {
+            console.error("Connectivity Failure:", error);
             if (message) {
                 message.innerText = "Terminal Error: Security Council unreachable.";
                 message.className = "feedback error";
             }
-        } finally {
+        } 
+        finally {
             if (submitBtn) {
                 submitBtn.innerText = "Submit Report";
                 submitBtn.disabled = false;
@@ -121,21 +113,20 @@ function initializeReportForm() {
         }
     };
 
-    // 3. Navigation
+    // Navigation
     if (backBtn) {
         backBtn.onclick = (e) => {
             e.preventDefault();
-            console.log("🔙 Returning to Dashboard...");
             window.location.href = "userdashboard.html";
         };
     }
 
-    console.log("%c✅ CYBER SENTINEL: Report System Ready.", "color: #10b981; font-weight: bold;");
+    
 }
 
-// --- Execution Entry Point ---
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initializeReportForm);
-} else {
+} 
+else {
     initializeReportForm();
 }

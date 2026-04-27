@@ -8,13 +8,23 @@
     padding: 0;
 }
 
+#userSearch, #sortUsers {
+    margin-bottom: 1.25rem;
+    width: 100%;
+}
+
+.user-list-panel h4 {
+    margin-bottom: 1.5rem;
+}
+
 /* Each user row */
 .user-item {
-    background: #f1f5f9;
+    background: #f8fafc;
     padding: 0.8rem 1rem;
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: var(--transition);
+    border: 1px solid var(--border-color);
 
     display: flex;
     justify-content: space-between;   /* 👈 key change */
@@ -22,7 +32,9 @@
 }
 
 .user-item:hover {
-    background: #e2e8f0;
+    background: #ffffff;
+    border-color: var(--primary-purple);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transform: scale(1.02);
 }
 
@@ -34,10 +46,11 @@
 
 .user-info span {
     font-weight: 600;
+    color: var(--text-main);
 }
 
 .user-info small {
-    color: #64748b;
+    color: var(--text-muted);
     font-size: 0.75rem;
 }
 

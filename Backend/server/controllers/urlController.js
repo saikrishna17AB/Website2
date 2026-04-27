@@ -9,12 +9,8 @@ export const checkurl=async (req,res)=>{
     }
 
 
-    const normalizedUrl = url
-            .toLowerCase()
-            .replace("https://", "")
-            .replace("http://", "")
-            .replace("www.", "")
-            .split("/")[0];
+    const normalizedUrl = url.toLowerCase().replace("https://", "").replace("http://", "")
+            .replace("www.", "").split("/")[0];
     const existingThreat = await UrlThreat.findOne({
         url: normalizedUrl
     });
@@ -77,6 +73,8 @@ export const checkurl=async (req,res)=>{
             status='Safe';
         }
 
+ 
+
         if (status === "Phishing") {
             await UrlThreat.findOneAndUpdate(
                 { url: normalizedUrl },
@@ -127,7 +125,6 @@ export const checkemail=async (req,res)=>{
         if(!normalizedEmail.includes('@') || !domainpart){
             score-=5;
         }
-        //If IP address is there as domain
 
         if(/\d+\.\d+\.\d+\.\d+/.test(domainpart)){
             score-=4;
@@ -159,7 +156,7 @@ export const checkemail=async (req,res)=>{
             const parts = domainpart.split('.');
             const tld = parts[parts.length - 1].toLowerCase();
             if(!commonTLDs.includes(tld)){
-                score -= 1; // penalize unusual TLD
+                score -= 1; 
             }
         }
         
@@ -170,9 +167,11 @@ export const checkemail=async (req,res)=>{
         const numCount = (localpart.match(/\d/g) || []).length;
 
         // Only penalize if digits are suspiciously mixed with letters
-        if (numCount > 3 && /[a-zA-Z]/.test(localpart)) score -= 1;  
+        if (numCount > 3 && /[a-zA-Z]/.test(localpart)) 
+            score -= 1;  
         // Reduce extra penalty for extremely digit-heavy but normal numeric emails
-        if (numCount > 6 && /[a-zA-Z]/.test(localpart)) score -= 1;
+        if (numCount > 6 && /[a-zA-Z]/.test(localpart)) 
+            score -= 1;
         
         
         const disposableDomains = ["mailinator.com", "tempmail.com", "10minutemail.com", "yopmail.com"];
@@ -180,7 +179,6 @@ export const checkemail=async (req,res)=>{
             score -= 2;
         }
 
-        // Look-alike domains (simple check for numbers replacing letters)
         if (domainpart && /[\d]/.test(domainpart) && domainpart.toLowerCase().replace(/\d/g, '') !== domainpart.toLowerCase()) {
             score -= 1;
         }
@@ -193,11 +191,11 @@ export const checkemail=async (req,res)=>{
             status="Suspicious";
         }
 
-        if (status === "Phishing") {
+        if(status==="Phishing") {
             await EmailThreat.findOneAndUpdate(
                 { email: normalizedEmail },
                 {
-                    email: normalizedEmail, // 🔥 IMPORTANT
+                    email: normalizedEmail, 
                     breachSource: "auto-detected",
                     $inc: { reportedCount: 1 },
                     $set: { lastReportedAt: new Date() }

@@ -40,7 +40,19 @@ export const getAdminRequests= async (req,res)=>{
 
 export const getAllUsers=async (req,res)=>{
     try{
-        const users = await usermodel.find().select(
+        const { search } = req.query;
+        let query = {};
+        
+        if (search) {
+            query = {
+                $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ]
+            };
+        }
+
+        const users = await usermodel.find(query).select(
             "name email role isAccountVerified adminRequest isSuspended createdAt"
         );
 
@@ -58,4 +70,37 @@ export const getAllUsers=async (req,res)=>{
     
     }
 }
+
+export const getAdmins = async (req, res) => {
+    try {
+        const admins = await usermodel.find({
+            role: "admin"
+        }).select("-password");
+
+        res.json({
+            success: true,
+            admins
+        });
+    } catch (err) {
+        res.json({ success: false });
+    }
+};
+
+export const removeAdmin = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        await usermodel.findByIdAndUpdate(userId, {
+            role: "user"
+        });
+
+        res.json({
+            success: true,
+            message: "Admin removed"
+        });
+
+    } catch (err) {
+        res.json({ success: false });
+    }
+};
 

@@ -32,7 +32,8 @@ async function getSuggestions() {
             suggestionsBox.appendChild(div);
         });
 
-    } catch (err) {
+    } 
+    catch (err) {
         suggestionsBox.style.display = "block";
         suggestionsBox.innerHTML = "Error fetching suggestions";
     }
@@ -79,13 +80,12 @@ checkBtn.onclick = async () => {
         getSuggestions();
     }
 
-    else {
+    else{
         strengthResult.innerHTML = `
             <span class="badge badge-strong">Strong Password</span>
             <p style="margin-top:10px; font-size:0.9rem; color: var(--success-green);">
                 Crack Time: ${crackTime}
-            </p>
-        `;
+            </p>`;
     }
 };
 

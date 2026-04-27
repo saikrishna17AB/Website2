@@ -13,12 +13,14 @@ const emailResultPanel = document.querySelector("#email-result");
 const back = document.querySelector("#goback");
 
 function setBadge(element, status) {
-    element.className = "badge"; // Reset classes
+    element.className = "badge"; 
     if (status === "Safe") {
         element.classList.add("badge-safe");
-    } else if (status === "Suspicious") {
+    } 
+    else if (status === "Suspicious") {
         element.classList.add("badge-warning");
-    } else if (status === "Phishing") {
+    } 
+    else if (status === "Phishing") {
         element.classList.add("badge-danger");
     }
 }
@@ -47,9 +49,11 @@ btn.addEventListener("click", async () => {
             urlResultPanel.style.display = "block";
             urlResultPanel.classList.add("fade-in");
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("URL check failed", error);
-    } finally {
+    } 
+    finally {
         btn.innerText = "Inspect Domain";
         btn.disabled = false;
     }
@@ -58,7 +62,6 @@ btn.addEventListener("click", async () => {
 ebtn.addEventListener("click", async () => {
     const email = inputemail.value.trim();
     if (!email) return;
-
     ebtn.innerText = "Verifying...";
     ebtn.disabled = true;
     emailResultPanel.style.display = "none";
@@ -79,9 +82,11 @@ ebtn.addEventListener("click", async () => {
             emailResultPanel.style.display = "block";
             emailResultPanel.classList.add("fade-in");
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Email check failed", error);
-    } finally {
+    } 
+    finally {
         ebtn.innerText = "Verify Sender";
         ebtn.disabled = false;
     }

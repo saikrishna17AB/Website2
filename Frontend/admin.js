@@ -140,19 +140,24 @@ function toggleUserDetails(show) {
 
 
 // Users Logic
-async function loadUsers() {
+async function loadUsers(searchQuery = "") {
     toggleUserDetails(false);
     const list = document.getElementById("userList");
     list.innerHTML = "<li>Retrieving operatives...</li>";
 
     try {
-        const res = await fetch("http://localhost:4000/api/user/getallusers", { credentials: "include" });
+        const url = searchQuery 
+            ? `http://localhost:4000/api/user/getallusers?search=${encodeURIComponent(searchQuery)}`
+            : "http://localhost:4000/api/user/getallusers";
+
+        const res = await fetch(url, { credentials: "include" });
         const data = await res.json();
         if (data.success) {
             list.innerHTML = "";
             allUsers = data.users;   // store users
             renderUsers(allUsers);   // render initially
-            
+        } else {
+            list.innerHTML = "<li>No users found</li>";
         }
     } catch (err) {
         list.innerHTML = "<li>Access Denied</li>";
@@ -173,11 +178,7 @@ function renderUsers(users) {
     }
 
     let processedUsers = users
-    .filter(user => user.role === "user") // remove admins
-    .filter(user =>
-        user.email.toLowerCase().includes(searchValue) ||
-        user.name.toLowerCase().includes(searchValue)
-    );
+    .filter(user => user.role === "user"); // remove admins
 
     // 2. Sort
     if (currentSort === "recent") {
@@ -264,8 +265,12 @@ document.getElementById("sortUsers").addEventListener("change", (e) => {
     renderUsers(allUsers);
 });
 
-document.getElementById("userSearch").addEventListener("input", () => {
-    renderUsers(allUsers);
+let searchTimeout;
+document.getElementById("userSearch").addEventListener("input", (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        loadUsers(e.target.value);
+    }, 300);
 });
 
 

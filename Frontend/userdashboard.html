@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Cyber Sentinel</title>
-    <!-- Fonts -->
+    <title>Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="userdashboard.css">
@@ -14,14 +12,24 @@
 
 <body>
     <header>
-        <a href="userdashboard.html" class="nav-brand">CYBER SENTINEL</a>
+        <a href="userdashboard.html" class="nav-brand">Website</a>
         <nav>
             <ul>
                 <li><a href="userdashboard.html" style="color: var(--primary-purple);">Dashboard</a></li>
                 <li><a href="suspiciousurl.html">URL Tools</a></li>
                 <li><a href="passwordbreach.html">Security Check</a></li>
                 <li><a href="report.html">Report Incident</a></li>
-                <li><button id="logout" class="btn-secondary">Logout</button></li>
+                <li class="profile-wrapper">
+                    <button id="profileBtn" class="profile-btn">
+                        <i data-lucide="user"></i>
+                    </button>
+
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <p id="profileName"></p>
+                        <p id="profileEmail"></p>
+                        <button id="logout" class="logout-btn">Logout</button>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>

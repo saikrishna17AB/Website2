@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin | Cyber Sentinel</title>
-    <!-- Fonts -->
+    <title>Super Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="superadmin.css">
@@ -22,9 +20,6 @@
             </ul>
         </nav>
     </header>
-
-    
-    <!-- MAIN MENU -->
         <div id="mainMenu">
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
             
@@ -36,6 +31,13 @@
                     <p>Review users requesting admin access</p>
                 </div>
 
+            </div>
+            <div class="modern-card" id="viewAdminsBtn" style="text-align:center; cursor:pointer; padding:2rem;">
+                <div style="width:60px; height:60px; background:#e0f2fe; border-radius:15px; display:flex; justify-content:center; align-items:center; margin:0 auto 1rem; color:#0369a1;">
+                    <i data-lucide="shield"></i>
+                </div>
+                <h3>Manage Admins</h3>
+                <p>View and remove admin privileges</p>
             </div>
         </div>
 
@@ -62,11 +64,31 @@
             </div>
         </div>
 
+        <div id="adminsSection" style="display:none;">
+    <div style="margin-bottom: 2rem; display:flex; justify-content: space-between;">
+        <h2>All Admins</h2>
+        <button id="backFromAdmins" class="btn-secondary">Back</button>
+    </div>
+
+    <div class="registry-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="admins-table"></tbody>
+            </table>
+        </div>
+    </div>
+
     
 
     <script src="superadmin.js"></script>
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
     </script>
 </body>

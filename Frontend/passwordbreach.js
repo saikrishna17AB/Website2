@@ -8,16 +8,12 @@ async function checkPassword(password) {
     checkBtn.disabled = true;
 
     try {
-        // Step 1: Convert password → SHA-1 hash
         const encoder = new TextEncoder();
         const data = encoder.encode(password);
         const hashBuffer = await crypto.subtle.digest("SHA-1", data);
 
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hash = hashArray
-            .map(b => b.toString(16).padStart(2, "0"))
-            .join("")
-            .toUpperCase();
+        const hash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
 
         // Step 2: Split hash
         const prefix = hash.substring(0, 5);
@@ -49,22 +45,23 @@ async function checkPassword(password) {
                     <p style="font-size: 0.9rem; color: var(--danger-red);">
                         Detected in <b>${breachCount.toLocaleString()}</b> known breaches.
                     </p>
-                </div>
-            `;
-        } else {
+                </div>`;
+        } 
+        else {
             resultMsg.innerHTML = `
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                     <span class="badge badge-safe">Secure</span>
                     <p style="font-size: 0.9rem; color: var(--success-green);">
                         No matches found in global breach catalogs.
                     </p>
-                </div>
-            `;
+                </div>`;
         }
 
-    } catch (error) {
+    } 
+    catch (error){
         resultMsg.innerHTML = '<span class="feedback error">Scan Interrupted: Network Error</span>';
-    } finally {
+    } 
+    finally{
         checkBtn.innerText = "Initiate Scan";
         checkBtn.disabled = false;
     }
@@ -72,12 +69,10 @@ async function checkPassword(password) {
 
 checkBtn.onclick = () => {
     const password = passwordInput.value;
-
     if (!password) {
         resultMsg.innerHTML = '<span class="feedback error">Input required: Empty token</span>';
         return;
     }
-
     checkPassword(password);
 };
 
@@ -88,7 +83,7 @@ document.getElementById("backBtn").onclick = () => {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    try {
+    try{
         const response = await fetch("http://localhost:4000/api/user/check-auth", {
             method: "GET", credentials: "include"
         });
@@ -96,7 +91,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!data.success) {
             window.location.href = "login.html";
         }
-    } catch (error) {
+    } 
+    catch (error) {
         window.location.href = "login.html";
     }
 });

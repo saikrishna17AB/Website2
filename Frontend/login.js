@@ -4,8 +4,6 @@ document.querySelector("#sub").addEventListener("click",async (e)=>{
     const email=document.querySelector("#email").value;
     const password=document.querySelector("#passwd").value;
     const role=document.querySelector("#role").value;
-    
-
     e.preventDefault();
 
     if (!email || !password || !role) {
@@ -66,7 +64,7 @@ logoutBtn.onclick = async () => {
 
 
             setTimeout(() => {
-                window.location.href = "login.html"; // redirect to login page
+                window.location.href = "login.html"; 
             }, 1500);
         } else {
             ;

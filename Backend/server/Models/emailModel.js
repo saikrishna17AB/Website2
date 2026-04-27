@@ -12,11 +12,12 @@ const emailThreatSchema = new mongoose.Schema({
         type: String,
         default: "Unknown"
     },
-    riskLevel: {
-        type: String,
-        enum: ["low", "medium", "high"],
-        default: "medium"
-    },
+
+    // riskLevel: {
+    //     type: String,
+    //     enum: ["low", "medium", "high"],
+    //     default: "medium"
+    // },
     exposedCount: {
         type: Number,
         default: 1
